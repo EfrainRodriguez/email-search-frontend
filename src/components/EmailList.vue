@@ -13,13 +13,19 @@ export default {
 <template>
   <div class="border border-gray-300 rounded-lg px-6 py-3">
     <div
-      class="border-b border-b-gray-300 px-6 py-2 mb-1 w-full flex justify-between"
+      class="grid grid-cols-12 gap-4 border-b border-b-gray-300 px-6 py-2 mb-1 w-full"
       v-for="item in emails"
-      :key="item.id"
+      :key="item?._id"
     >
-      <div>{{ item.first_name }}</div>
-      <div>{{ item.email }}</div>
-      <div class="text-gray-400 text-right">Fecha</div>
+      <div class="truncate col-span-12 sm:col-span-4 font-medium">
+        {{ item?._source?.Subject }}
+      </div>
+      <div class="truncate col-span-12 sm:col-span-6">
+        {{ item?._source?._body }}
+      </div>
+      <div class="col-span-12 sm:col-span-2 text-gray-400 text-right">
+        {{ item?._source?.Date }}
+      </div>
     </div>
     <div class="flex justify-center mt-6">
       <div class="flex space-x-2">

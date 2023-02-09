@@ -1,7 +1,7 @@
 <script>
 export default {
   name: "Search",
-  props: ["modelValue"],
+  props: ["modelValue", "searchEmails"],
   emits: ["update:modelValue"],
 };
 </script>
@@ -30,10 +30,11 @@ export default {
     <input
       type="text"
       id="search_field"
-      class="bg-gray-50 pl-10 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500"
+      class="bg-gray-50 pl-10 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full placeholder-gray-400"
       placeholder="Type your search here"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
+      v-on:keyup="$emit('searchEmails', $event.key)"
     />
   </div>
 </template>

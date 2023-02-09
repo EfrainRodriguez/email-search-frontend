@@ -1,6 +1,6 @@
 <script>
-import axios from "./utils/axios";
-
+import { getEmails } from "./services/zincsearch";
+// components
 import Spinner from "./components/Spinner.vue";
 import EmailList from "./components/EmailList.vue";
 import Navbar from "./components/Navbar.vue";
@@ -16,12 +16,7 @@ export default {
     };
   },
   async mounted() {
-    this.isLoading = true;
-    const {
-      data: { data },
-    } = await axios.get("/users");
-    this.emails = data;
-    this.isLoading = false;
+    await this.searchEmails();
   },
   components: {
     Spinner,
@@ -29,14 +24,34 @@ export default {
     Navbar,
     Search,
   },
+  methods: {
+    async searchEmails() {
+      this.isLoading = true;
+      try {
+        const data = await getEmails(this.search);
+        const {
+          hits: { hits },
+        } = data;
+        this.emails = hits;
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        throw error;
+      }
+    },
+    async onSearchEmailsFromQuery(key) {
+      if (key === "Enter") {
+        await this.searchEmails();
+      }
+    },
+  },
 };
 </script>
 
 <template>
   <Navbar />
   <div class="container max-w-screen-lg mx-auto pt-10">
-    <Search v-model="search" />
-    {{ search }}
+    <Search v-model="search" @searchEmails="onSearchEmailsFromQuery" />
   </div>
   <div class="container max-w-screen-lg mx-auto pt-10 w-full">
     <Spinner v-if="isLoading" />
