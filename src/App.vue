@@ -12,6 +12,7 @@ export default {
     return {
       search: "",
       emails: [],
+      total: 0,
       isLoading: false,
     };
   },
@@ -30,9 +31,10 @@ export default {
       try {
         const data = await getEmails(this.search);
         const {
-          hits: { hits },
+          hits: { hits, total },
         } = data;
         this.emails = hits;
+        this.total = total;
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -55,6 +57,6 @@ export default {
   </div>
   <div class="container max-w-screen-lg mx-auto pt-10 w-full">
     <Spinner v-if="isLoading" />
-    <EmailList v-else :emails="emails" />
+    <EmailList v-else :emails="emails" :total="total" />
   </div>
 </template>
